@@ -104,20 +104,6 @@
             
           </div>
         
-		
-		<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-			<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
-			<script>
-			var cloudTieConfig = {
-			  url: document.location.href, 
-			  sourceId: "",
-			  productKey: "7daf16bb12394ce78d0252179a6adc17",
-			  target: "cloud-tie-wrapper"
-			};
-			var yunManualLoad = true;
-			Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
-			</script>
-		
         
         
   
@@ -138,20 +124,20 @@
   <h1 class="title">留言</h1>
 
   
-      <div id="fb-root"></div>
-<script>
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
-
-<div class="fb-comments" data-href="https://chenshi011.github.io/2017/05/15/git/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
-      
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+	<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+	<script>
+	var cloudTieConfig = {
+	  url: document.location.href, 
+	  sourceId: null,
+	  productKey: 7daf16bb12394ce78d0252179a6adc17,
+	  target: "cloud-tie-wrapper"
+	};
+	var yunManualLoad = true;
+	Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+	</script>
   
+ 
 </section>
 
 
