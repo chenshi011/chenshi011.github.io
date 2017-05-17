@@ -63,6 +63,8 @@ var _hmt = _hmt || [];
     
       <li><a href="/archives">归档</a></li>
     
+      <li><a href="/atom.xml">Rss</a></li>
+    
   </ul>
   <div class="clearfix"></div>
 </nav>
@@ -162,7 +164,22 @@ var _hmt = _hmt || [];
   
 </div>
 
-</footer>
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></footer>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
