@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chenshi011.github.io/"/>
-  <updated>2017-05-15T06:50:46.038Z</updated>
+  <updated>2017-05-17T10:58:05.756Z</updated>
   <id>https://chenshi011.github.io/</id>
   
   <author>
@@ -14,6 +14,22 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title> android </title>
+    <link href="https://chenshi011.github.io/2017/05/17/android/"/>
+    <id>https://chenshi011.github.io/2017/05/17/android/</id>
+    <published>2017-05-17T10:57:16.000Z</published>
+    <updated>2017-05-17T10:58:05.756Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="android" scheme="https://chenshi011.github.io/tags/android/"/>
+    
+  </entry>
   
   <entry>
     <title>git 如何查看某一行代码是谁写的</title>
