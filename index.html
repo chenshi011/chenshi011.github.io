@@ -81,13 +81,58 @@ var _hmt = _hmt || [];
       
       
   
-    <h1 class="title"><a href="/2017/05/17/android/"> android </a></h1>
+    <h1 class="title"><a href="/2017/05/17/android/"> Android自定义View实现滑块SeekBar </a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>   话不多说先上效果图：<br>   <img src="https://raw.githubusercontent.com/chenshi011/BlockSeekBar/master/screenshot1.png" alt="效果"><br>    本篇文章实现上图的效果，主要使用canvas.drawPath()。</p>
+<p>  首先看到这张图想到的是直接画N个rect，有的实心有的空心不就完事了吗。不过这样的代码肯定是这样的<br>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(int i=0;;i++) canvas.drawRect();</div></pre></td></tr></table></figure></p>
+<p>  乍看觉得没问题啊，但canvas不断的重复调用drawXX的方式好吗？有没更好的方式，那么我们的<strong>Path</strong>登场了。<br>  把需要绘制的rect合并到Path中然后交给canvas一次处理就好了。<br>  好了这么一说其实很简单了，</p>
+<p>  核心计算path的算法如下：</p>
+<pre><code>for (int i = 0; i &lt; mBlockCount; i++) {
+      float left = getPaddingLeft() + (mBlockWidth + mBlockSpace) * i;
+      float right = left + mBlockWidth;
+      float bottom = top + height;
+      Path outsidePath = new Path();
+      RectF outsideRect = new RectF(left, top, right, bottom);
+      outsidePath.addRoundRect(outsideRect, mBlockRadius, mBlockRadius,
+              Path.Direction.CW);
+      Path insidePath = new Path();
+      RectF insidedeRect = new RectF(left + mBlockLineWidth,
+              top + mBlockLineWidth, right - mBlockLineWidth,
+              bottom - mBlockLineWidth);
+      insidePath.addRoundRect(insidedeRect, mBlockRadius,
+              mBlockRadius, Path.Direction.CW);
+      mInsidePaths.add(insidePath);
+      mOutsidePaths.add(outsidePath);
+  }
+</code></pre><p>  我们把滑块分为内层的rect一组跟外层的rect一组，算出2组path备用。然后开启我们的draw之旅：</p>
+<h2 id="Draw"><a href="#Draw" class="headerlink" title="Draw"></a>Draw</h2><hr>
+<p> 我们有了内外层的path了怎么用呢。直接draw，好像这样绘制出来的是两个重叠的区域吧。莫慌canvas里面本身还提供了canvas.clipPath的方法：</p>
+<pre><code>for (int i = 0; i &lt; mBlockCount; i++) {
+     if (i &gt;= _curblock) { //_curblock表示当前的滑块值
+         canvas.clipPath(mInsidePaths.get(i), Op.DIFFERENCE);
+     }
+     canvas.drawPath(mOutsidePaths.get(i), mPaint);
+ }
+</code></pre><p>好了到这里差不多了然后再添加一些自定义属性,因为我们的滑动是分垂直跟水平方向的，这边属性公用了 android:orientation    </p>
+<h1 id="attrs"><a href="#attrs" class="headerlink" title="attrs"></a>attrs</h1><ul>
+<li>android:orientation</li>
+<li>point_progress</li>
+<li>point_max</li>
+<li>point_small_radius</li>
+<li>point_block_radius</li>
+<li>point_progress_height</li>
+<li>point_progress_full_color</li>
+<li>point_progress_empty_color</li>
+<li>point_border_line_color</li>
+<li>point_border_fill_color</li>
+<li>point_border_line_width</li>
+</ul>
+<h1 id="End"><a href="#End" class="headerlink" title="End"></a>End</h1><p>好了最后觉得应该显示一下滑块的值，那么利用canvas.drawText轻松搞定了。<br>初次尝试写blog，比较粗略，文笔也不好，就那这个简单的例子练练手。上源码：<br><a href="https://github.com/chenshi011/BlockSeekBar" target="_blank" rel="external">点我下载</a></p>
+
       
     </div>
     <footer>
@@ -229,7 +274,7 @@ var _hmt = _hmt || [];
   <ul class="entry">
     
       <li>
-        <a href="/2017/05/17/android/"> android </a>
+        <a href="/2017/05/17/android/"> Android自定义View实现滑块SeekBar </a>
       </li>
     
       <li>
