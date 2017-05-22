@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chenshi011.github.io/"/>
-  <updated>2017-05-19T09:44:39.586Z</updated>
+  <updated>2017-05-22T03:41:26.999Z</updated>
   <id>https://chenshi011.github.io/</id>
   
   <author>
@@ -16,9 +16,187 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title> Android读写Excel到sqlite，实现查询检索 </title>
+    <link href="https://chenshi011.github.io/2017/05/22/android-PlantQuery/"/>
+    <id>https://chenshi011.github.io/2017/05/22/android-PlantQuery/</id>
+    <published>2017-05-22T03:25:11.000Z</published>
+    <updated>2017-05-22T03:41:26.999Z</updated>
+    
+    <content type="html"><![CDATA[<p>话不多说先上效果图：<br>   <img src="https://raw.githubusercontent.com/chenshi011/PlantQuery/master/screenshot.png" alt="效果"><br>    由于中国景观植物检索网<a href="http://plant.ela.cn/" target="_blank" rel="external">http://plant.ela.cn/</a> 没有app，自己动手写的一个数据来源于该网站的Android App<br>由于数据是静态的可以离线使用，方便外业查询检索。</p>
+<h2 id="主要思路："><a href="#主要思路：" class="headerlink" title="主要思路："></a>主要思路：</h2><ul>
+<li>初始化从Assets里面拷贝数据到sdcard；<br> public static boolean copyFileFromAssets(Context context, String filepath,<pre><code>    String fileName) {
+boolean result = false;
+try {
+    // 检查 SQLite 数据库文件是否存在
+    if ((new File(filepath + fileName)).exists() == false) {
+        // 如 SQLite 数据库文件不存在，再检查一下 database 目录是否存在
+        File f = new File(filepath);
+        // 如 database 目录不存在，新建该目录
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        try {
+            // 得到 assets 目录下我们实现准备好的 SQLite 数据库作为输入流
+            InputStream is = context.getAssets().open(fileName);
+            // 输出流
+            OutputStream os = new FileOutputStream(filepath + fileName);
+            // 文件写入
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) &gt; 0) {
+                os.write(buffer, 0, length);
+            }
+            // 关闭文件流
+            os.flush();
+            os.close();
+            is.close();
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+} catch (Exception e) {
+    // TODO: handle exception
+}
+return result;
+</code></pre> }</li>
+<li><p>读取Excel到sqlite；<br> 根据xml模板读取一个Bean对象，然后根据利用jxl来读取数据<br>/<em>*</em></p>
+<ul>
+<li>读取Excel</li>
+<li></li>
+<li>@param excelPath</li>
+<li><p>@param excelBean<br>*/<br>public void readExcel(String excelPath, String picPath, ExcelBean excelBean) {<br> try {</p>
+<pre><code>int add = 0;
+int update = 0;
+int total = 0;
+m_inputResult = new InputResult();
+m_inputResult.setStatus(InputResult.status_ok);
+File excelDir = new File(excelPath);
+if (!excelDir.exists()) {
+    Message message = new Message();
+    message.what = UPDATE_ERROR;
+    message.obj = getString(R.string.input_excel_style_err);
+    inputHandler.sendMessage(message);
+    return;
+}
+File picDir = new File(picPath);
+if (!picDir.exists()) {
+    Message message = new Message();
+    message.what = UPDATE_ERROR;
+    message.obj = getString(R.string.input_pic_path_err);
+    inputHandler.sendMessage(message);
+    return;
+}
+Workbook book = Workbook.getWorkbook(new File(excelPath));
+Sheet sheet = book.getSheet(excelBean.getSheetName());
+
+int rows = sheet.getRows(); // 行
+
+// int Cols = sheet.getColumns(); //列
+int Id_column = excelBean.getId_column();
+int Name_column = excelBean.getName_column();
+int Alias_column = excelBean.getAlias_column();
+int LatinName_column = excelBean.getLatinName_column();
+int Belongs_column = excelBean.getBelongs_column();
+int Branch_column = excelBean.getBranch_column();
+int City_column = excelBean.getCity_column();
+int Details_column = excelBean.getDetails_column();
+
+int beginRow = excelBean.getBeginRow();
+total = rows - beginRow;
+m_inputResult.setTotal(total);
+for (int i = beginRow; i &lt; rows; i++) {
+    m_inputResult.setIndex(i + 1 - beginRow);
+    int index = (int) ((i + 1) * 100) / rows;
+    m_inputResult.setProgress(index);
+    Message message = new Message();
+    message.what = UPDATE_PROGRESS;
+    message.obj = m_inputResult;
+    inputHandler.sendMessage(message);
+
+    Cell[] cels = sheet.getRow(i);
+    int size = cels.length;
+    int id = -1;
+    String name = null, alias = null, latinName = null, belongs = null, branch = null, city = null, details = null;
+    if (Id_column &lt; size)
+        id = Integer.valueOf(cels[Id_column].getContents());
+    if (Name_column &lt; size)
+        name = cels[Name_column].getContents();
+    if (Alias_column &lt; size)
+        alias = cels[Alias_column].getContents();
+    if (LatinName_column &lt; size)
+        latinName = cels[LatinName_column].getContents();
+    if (Belongs_column &lt; size)
+        belongs = cels[Belongs_column].getContents();
+    if (Branch_column &lt; size)
+        branch = cels[Branch_column].getContents();
+    if (City_column &lt; size)
+        city = cels[City_column].getContents();
+    if (Details_column &lt; size)
+        details = cels[Details_column].getContents();
+
+    List&lt;File&gt; pic_files = getMatchFile(picDir, String.valueOf(id));
+    String pics = null;
+    if (pic_files != null) {
+        int count = pic_files.size();
+        if (count &gt; 0) {
+            pics = &quot;&quot;;
+            for (int j = 0; j &lt; count; j++) {
+                if (j &lt; count - 1) {
+                    pics += pic_files.get(j).getPath() + &quot;;&quot;;
+                } else {
+                    pics += pic_files.get(j).getPath();
+                }
+            }
+        }
+    }
+    Plant plant = new Plant(id, name, alias, latinName, belongs,
+            branch, city, details, pics);
+    if (!plantManager.isPlantExist(id)) {
+        plantManager.addPlant(plant);
+        add++;
+        m_inputResult.setAdd(add);
+    } else {
+        plantManager.updatePlant(plant);
+        update++;
+        m_inputResult.setUpdate(update);
+    }
+}
+book.close();
+</code></pre><p> } catch (Exception e) {</p>
+<pre><code>Message message = new Message();
+message.what = UPDATE_ERROR;
+m_inputResult.setStatus(InputResult.status_err);
+m_inputResult.setMsg(getString(R.string.input_error));
+message.obj = m_inputResult;
+inputHandler.sendMessage(message);
+</code></pre><p> }<br>}</p>
+</li>
+</ul>
+</li>
+<li><p>sqlite的查询模糊多关键字查询；</p>
+</li>
+<li>sqlite的增删改查</li>
+<li>service实现后台导入下载<br>  具体实现见源码</li>
+</ul>
+<h1 id="End"><a href="#End" class="headerlink" title="End"></a>End</h1><p> 源码已经上传<a href="https://github.com/chenshi011/PlantQuery" target="_blank" rel="external">点我下载</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;话不多说先上效果图：&lt;br&gt;   &lt;img src=&quot;https://raw.githubusercontent.com/chenshi011/PlantQuery/master/screenshot.png&quot; alt=&quot;效果&quot;&gt;&lt;br&gt;    由于中国景观植物检索网&lt;a 
+    
+    </summary>
+    
+    
+      <category term="android" scheme="https://chenshi011.github.io/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
     <title> Android自定义View实现滑块SeekBar </title>
-    <link href="https://chenshi011.github.io/2017/05/17/android/"/>
-    <id>https://chenshi011.github.io/2017/05/17/android/</id>
+    <link href="https://chenshi011.github.io/2017/05/17/android-BlockSeekBar/"/>
+    <id>https://chenshi011.github.io/2017/05/17/android-BlockSeekBar/</id>
     <published>2017-05-17T10:57:16.000Z</published>
     <updated>2017-05-19T09:44:39.586Z</updated>
     
