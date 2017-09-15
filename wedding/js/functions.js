@@ -153,7 +153,6 @@ function startHeartAnimation() {
 		}
 		if (angle >= 30) {
 			clearInterval(animationTimer);
-			showMessages();
 		} else {
 			angle += 0.2;
 		}
