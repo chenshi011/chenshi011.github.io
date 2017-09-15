@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+<style type="text/css">
+@font-face {
+	font-family: digit;
+	src: url('digital-7_mono.ttf') format("truetype");
+}
+</style>
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/garden.js"></script>
+</head>
+
+<body>
+	
+<div>
+	<div id="content" class="page">
+		<img id="bg" src="img/demo.jpg" alt="" width="320" height="504"/>
+		<div id="code">
+			<span class="comments">敬邀：</span>
+			<span id="code_title" class="keyword" ></span> <br />
+			<span class="comments"/>光临：</span>
+			<span class="keyword">xx</span>
+			<span class="comments" >先生</span> 
+			<span class="keyword">xx</span>
+			<span class="comments" >女士</span> 
+			<span class="comments">的婚礼</span>
+			<br />
+			<span class="comments">时间：</span>
+			<span class="keyword" >2017年10月6日</span> 
+			<br />
+			<span class="comments">地点：</span>
+			<span id="code_pos" class="keyword" >重庆市开县</span>
+		</div>
+	</div>
+	<div id="loveHeart">
+		<canvas id="garden"></canvas>
+	</div>
+	
+</div>
+
+<style type="text/css">
+
+.page{
+    position: relative;
+    width: 320px;
+    height: 504px;
+    overflow: hidden;
+}
+
+#loveHeart{
+	670px;height:625px;position:absolute;
+        background-image: url(../img/test.png);
+        background-repeat: no-repeat;
+        background-position: center;
+		}
+</style>
+
+<script type="text/javascript">
+	var url=location.search;
+	var Request = new Object();
+	if(url.indexOf("?")!=-1)
+	{
+	　　var str = url.substr(1)　//去掉?号
+	　　strs = str.split("&");
+	　　for(var i=0;i<strs.length;i++)
+	　　{
+	 　　　 Request[strs[i].split("=")[0]]=(strs[i].split("=")[1]);
+	　　}
+	}
+	var name = "您";
+	
+	var rName = decodeURI(Request["name"]);
+	if(rName){
+		name = rName;
+	}
+
+	//document.getElementById('code_title').innerHTML = "敬邀:" + name;	
+	
+	$("#code_title")[0].innerText = name;	
+
+	function Request(strName)
+	{
+	　　var strHref = "www.jb51.net/index.htm?a=1&b=1&c=测试测试";
+	　　var intPos = strHref.indexOf("?");
+	　　var strRight = strHref.substr(intPos + 1);
+	　　var arrTmp = strRight.split("&");
+	　　for(var i = 0; i < arrTmp.length; i++)
+	　　{
+	　　　　var arrTemp = arrTmp[i ].split("=");
+	　　　　if(arrTemp[0].toUpperCase() == strName.toUpperCase()) return arrTemp[1];
+	　　}
+	　　return "";
+	}
+
+	if (!document.createElement('canvas').getContext) {
+		var msg = document.createElement("div");
+		msg.id = "errorMsg";
+		msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+		document.body.appendChild(msg);
+		$("#code").css("display", "none");
+		
+		document.execCommand("stop");
+	} else {
+		setTimeout(function () {
+			startHeartAnimation();
+		}, 500);
+		$("#code").typewriter();
+	}
+</script>
+</body>
+</html>
