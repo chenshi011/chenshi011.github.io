@@ -184,6 +184,6 @@ function startHeartAnimation() {
 
 function adjustCodePosition(offsetX, scale) {
 	//$('#code').css("margin-top", ($("#garden").height() - $("#code").height()) / 2);
-	$('#code').css("top", $("#content").position().top + $("#content").height() / 2 - scale * 50);
-	$('#code').css("left", offsetX);
+	$('#code').css("top", $("#content").position().top + $("#content").height() / 2 - scale * 120);
+	$('#code').css("left", offsetX + scale * 80);
 }
