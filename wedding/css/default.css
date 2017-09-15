@@ -3,8 +3,8 @@
 #messages{display:none}
 #clickSound{display:none}
 #code{width:100%;height:100%;position:absolute;color:#333;font-family:"Consolas","Monaco","Bitstream Vera Sans Mono","Courier New","sans-serif";font-size:12px}
-#code .string{color:#2a36ff}
-#code .keyword{color:#7f0055;font-weight:bold;font-size:16px}
+#code .string{color:#333333}
+#code .keyword{color:#7f0055;font-weight:bold;font-size:14px}
 #code .placeholder{margin-left:15px}#code .space{margin-left:7px}
 #code .comments{color:#000000}
 #copyright{margin-top:10px;text-align:center;width:100%;color:#666}
