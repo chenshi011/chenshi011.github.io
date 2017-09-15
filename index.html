@@ -71,11 +71,9 @@
 	var name = "您";
 	
 	var rName = decodeURI(Request["name"]);
-	if(rName){
+	if(rName && rName!= "undefined"){
 		name = rName;
 	}
-
-	//document.getElementById('code_title').innerHTML = "敬邀:" + name;	
 	
 	$("#code_title")[0].innerText = name;	
 
