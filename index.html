@@ -43,7 +43,8 @@
 	<div id="loveHeart">
 		<canvas id="garden"></canvas>
 	</div>
-	
+	<audio id="myaudio" src="wedding/img/renxi.mp3" autoplay controls hidden="true" style="position:absolute; z-index:0; opacity:0">
+</audio>
 </div>
 <style type="text/css">
 .page{
@@ -57,7 +58,15 @@
 	670px;height:625px;position:absolute;
 	}
 </style>
-<script type="text/javascript">
+<script type="text/javascript">	
+	var objLoading = document.getElementById("load");   
+	if (objLoading != null)   
+	{   
+	    objLoading.style.display = "none"; 
+	    document.getElementById("pageload").style.display = "block";
+	    voldown = document.getElementById("myaudio");
+	    voldown.volume = "0.2";
+	}   
 	var url=location.search;
 	var Request = new Object();
 	if(url.indexOf("?")!=-1)
