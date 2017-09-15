@@ -83,7 +83,7 @@ function pageResponse(opt) {
 		
 		if (obj.id == "loveHeart") {
 			initGarden(pw,ph, num);
-			adjustCodePosition(pw * num / 20);
+			adjustCodePosition(pw * num / 20, num);
 		}
     }
 
@@ -182,8 +182,8 @@ function startHeartAnimation() {
 	};
 })(jQuery);
 
-function adjustCodePosition(offsetX) {
+function adjustCodePosition(offsetX, scale) {
 	//$('#code').css("margin-top", ($("#garden").height() - $("#code").height()) / 2);
-	$('#code').css("top", $("#content").position().top + $("#content").height() / 2);
+	$('#code').css("top", $("#content").position().top + $("#content").height() / 2 - scale * 50);
 	$('#code').css("left", offsetX);
 }
