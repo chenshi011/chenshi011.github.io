@@ -59,13 +59,10 @@
 	}
 </style>
 <script type="text/javascript">	
-	var objLoading = document.getElementById("load");   
-	if (objLoading != null)   
+	var vidio = document.getElementById("myaudio");   
+	if (vidio != null)   
 	{   
-	    objLoading.style.display = "none"; 
-	    document.getElementById("pageload").style.display = "block";
-	    voldown = document.getElementById("myaudio");
-	    voldown.volume = "0.2";
+	    vidio.volume = "0.2";
 	}   
 	var url=location.search;
 	var Request = new Object();
